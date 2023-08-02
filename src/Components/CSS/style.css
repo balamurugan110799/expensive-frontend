@@ -1,0 +1,17 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+.grid{
+    display: grid;
+}
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.border{
+    border: 1px solid #ccc;
+}
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
