@@ -7,15 +7,19 @@ import ExtraExpensive from './Pages/ExtraExpensive';
 import Admin from './Pages/Admin';
 import Login from './Pages/Login';
 import PageNotFound from './Pages/PageNotFound';
+import Gold from './Pages/Gold/Gold';
+import CreateYear from './Pages/Expensive/CreateYear';
+import EsitmatePayment from './Pages/House/esitmatePayment';
+import Estimate from './Pages/House/Estimate';
 
 function App() {
-  console.log(sessionStorage.getItem("role"))
+
   const auth = sessionStorage.getItem("auth")
   const user = sessionStorage.getItem("role")
   const admin = sessionStorage.getItem("role")
   const superadmin = sessionStorage.getItem("role")
 
-  console.log(auth !== undefined || auth !== null, "yeyydgy")
+
   return (
     <div>
       <BrowserRouter>
@@ -27,23 +31,29 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/importance" element={<Importance />} />
               <Route path="/extra-expensive" element={<ExtraExpensive />} />
+              <Route path="/create-year" element={<CreateYear />} />
+
             </>
             :
             <>
               <Route path="/admin" element={<Admin />} />
-
               <Route path="*" element={<Navigate replace to="/" />} />
             </>
           }
 
 
-{sessionStorage.auth !== null && sessionStorage.auth !== undefined && admin === "admin" ?
+          {sessionStorage.auth !== null && sessionStorage.auth !== undefined && admin === "admin" ?
             <>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/extra-expensive" element={<ExtraExpensive />} />
               <Route path="/importance" element={<Importance />} />
+              <Route path="/esitmate-payment" element={<EsitmatePayment />} />
+              <Route path="/esitmate" element={<Estimate />} />
 
+
+              
+              <Route path="/create-year" element={<CreateYear />} />
             </>
             :
             <>
@@ -59,6 +69,7 @@ function App() {
               <Route path="/admin" element={<Admin />} />
               <Route path="/extra-expensive" element={<ExtraExpensive />} />
               <Route path="/importance" element={<Importance />} />
+              <Route path="/gold" element={<Gold />} />
             </>
             :
             <>

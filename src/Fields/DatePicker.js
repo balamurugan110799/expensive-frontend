@@ -3,14 +3,12 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-function DatePickerComponents(props){
-  
+function DatePickerComponents(props) {
     const [startDate, setStartDate] = useState(new Date());
-    return(
+    return (
         <div>
-
-<label className="block my-2">{props.label}</label>
-<DatePicker className="border" selected={props.selected} onChange={(e)=>props.handleChange(e)} />
+            <label className="block my-2">{props.label}</label>
+            <DatePicker className="border" selected={props.selected} onChange={(e) => props.handleChange(e)} />
         </div>
     )
 }

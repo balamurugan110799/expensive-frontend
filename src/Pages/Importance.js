@@ -5,15 +5,15 @@ import axios from 'axios';
 import "react-datepicker/dist/react-datepicker.css";
 import Sidebar from "../Components/SideBar";
 import Layout from "../Components/Layout";
-import { useSelector,useDispatch } from "react-redux";
-import {reduceramount } from "../Actions/expensive"
+import { useSelector, useDispatch } from "react-redux";
+import { reduceramount } from "../Actions/expensive"
 
 
 function Importance() {
     // console.log(useSelector(state=>state.total_amount))
-    const amount_store = useSelector(state=>state.total_amount.total_amount)
+    const amount_store = useSelector(state => state.total_amount.total_amount)
     const dispatch = useDispatch()
-    const [reduceAmount,setreduceAmount]=useState()
+    const [reduceAmount, setreduceAmount] = useState()
     console.log(amount_store)
     const [dataJson, setJsonValue] = useState([
     ])
@@ -23,7 +23,10 @@ function Importance() {
         expensive: "",
         amount: "",
     })
-
+    const renderYearContent = (year) => {
+        const tooltipText = `Tooltip for year: ${year}`;
+        return <span title={tooltipText}>{year}</span>;
+    };
     const [upadte, setUpdate] = useState({
         id: null,
         date: "",
@@ -58,8 +61,8 @@ function Importance() {
             [name]: value,
         })
         // let filter = 
-        data.expensive= e.target.value
-        let filter = optiondata.filter((option) => option.expensive===data.expensive ? data.amount = option.amount :null )
+        data.expensive = e.target.value
+        let filter = optiondata.filter((option) => option.expensive === data.expensive ? data.amount = option.amount : null)
         setData(data)
     }
 
@@ -83,9 +86,9 @@ function Importance() {
         e.preventDefault()
         data.date = `${startDate}`
         Errorhandler(data)
-      
-       
-       
+
+
+
         dispatch(reduceramount(data.amount))
         var today = data.date
         var claimedDate = today.toString().split(" ");
@@ -97,13 +100,13 @@ function Importance() {
 
     }
 
-    const createData = (data) =>{
+    const createData = (data) => {
         axios.post("http://localhost:4000/api/importance", data)
-        .then((data)=>{
-            getAll()
-        })
-        .catch((err) => {
-        })
+            .then((data) => {
+                getAll()
+            })
+            .catch((err) => {
+            })
     }
 
     const updateClick = (e) => {
@@ -130,14 +133,14 @@ function Importance() {
         e.preventDefault()
     }
 
-    const SelectOption = ()=>{
+    const SelectOption = () => {
         axios.get('http://localhost:4000/api/getAll')
-        .then((res) => {
-            setOptionData(res.data)
-        })
-        .catch((err) => {
-            //console.log(err)
-        })
+            .then((res) => {
+                setOptionData(res.data)
+            })
+            .catch((err) => {
+                //console.log(err)
+            })
     }
 
     const getAll = () => {
@@ -155,28 +158,28 @@ function Importance() {
     }, [])
     return (
         <div>
-            <div className="w-[100%] flex">
-                <div className="w-[20%]">
-
-                    <Sidebar />
-                </div>
-                <div className="w-[80%]">
                     <Layout>
                         <div className="flex w-[100%]">
 
 
                             <form className="flex bg-[#fff] w-[100%] py-4">
                                 <div>
-                                    <label className="mx-4 text-primary text-[14px] font-semibold">Date</label>
+                                    <DatePicker
+                                        selected={new Date()}
+                                        renderYearContent={renderYearContent}
+                                        showYearPicker
+                                        dateFormat="yyyy"
+                                    />
+                                    <label className="mx-4 text-primary text-sm font-semibold">Date</label>
                                     <div className="pt-1">
-                                        <DatePicker id="date" selected={startDate} onChange={(date, e) => setDate(date, e)} className="border p-1  mx-4 h-[36px] text-[14px]" />
+                                        <DatePicker id="date" selected={startDate} onChange={(date, e) => setDate(date, e)} className="border p-1  mx-4 h-[36px] text-sm" />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="mx-4 text-primary text-[14px] font-semibold">Select</label>
+                                    <label className="mx-4 text-primary text-sm font-semibold">Select</label>
                                     <div className="pt-1">
-                                        <select name="expensive" id="expensive" onChange={(e) => handleChange(e)} className="border w-[200px] mx-4 h-[36px] text-[14px]" >
+                                        <select name="expensive" id="expensive" onChange={(e) => handleChange(e)} className="border w-[200px] mx-4 h-[36px] text-sm" >
 
                                             <option style={{ display: "none" }}>Select </option>
                                             {optiondata?.map((v) => {
@@ -191,9 +194,9 @@ function Importance() {
                                 </div>
 
                                 <div>
-                                    <label className="mx-4 text-primary font-semibold text-[14px]">Amount</label>
+                                    <label className="mx-4 text-primary font-semibold text-sm">Amount</label>
                                     <div className="pt-1">
-                                        <input disabled type="text" pattern="[0-9]{10}" id="amount" value={data.amount} name="amount" onChange={(e) => handleChange(e)} className="border mx-4 h-[36px] text-[14px]" />
+                                        <input disabled type="text" pattern="[0-9]{10}" id="amount" value={data.amount} name="amount" onChange={(e) => handleChange(e)} className="border mx-4 h-[36px] text-sm" />
                                     </div>
                                     <span className="mx-4 text-sm text-error">{error.amount}</span>
                                 </div>
@@ -236,7 +239,7 @@ function Importance() {
                                 {dataJson?.map((v, i) => {
                                     return (
                                         <tr keys={i}>
-                                            <td className="px-2">{i+1}</td>
+                                            <td className="px-2">{i + 1}</td>
                                             <td className="px-2">{v?.date}</td>
                                             <td className="px-2">{v?.expensive}</td>
                                             <td className="px-2">{v?.amount}</td>
@@ -249,8 +252,7 @@ function Importance() {
                         </table>
 
                     </Layout>
-                </div>
-            </div>
+               
         </div>
     )
 }

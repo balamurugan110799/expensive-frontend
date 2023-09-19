@@ -48,27 +48,23 @@ function Admin() {
 
     return (
         <div>
-            <div className="w-[100%] flex">
-                <div className="w-[20%]">
-                    <Sidebar />
-                </div>
-                <div className="w-[80%]">
+           
                     <Layout>
 
 
                         <div className="w-[100%] flex flex-wrap">
                             <div className="w-[33%] ">
                                 <div>
-                                    <label className="mx-4 text-primary text-[14px] font-semibold">Expensive</label>
+                                    <label className="mx-4 text-primary text-sm font-semibold">Expensive</label>
                                 </div>
-                                <input name="expensive" onChange={(e)=>handleChange(e)} type="text" className="border mx-4 h-[36px] text-[14px]" />
+                                <input name="expensive" onChange={(e)=>handleChange(e)} type="text" className="border mx-4 h-[36px] text-sm" />
                             </div>
 
                             <div className="w-[33%] ">
                                 <div>
-                                    <label className="mx-4 text-primary text-[14px] font-semibold">Amount</label>
+                                    <label className="mx-4 text-primary text-sm font-semibold">Amount</label>
                                 </div>
-                                <input name="amount" onChange={(e)=>handleChange(e)} type="number" className="border mx-4 h-[36px] text-[14px]"  />
+                                <input name="amount" onChange={(e)=>handleChange(e)} type="number" className="border mx-4 h-[36px] text-sm"  />
                             </div>
 
                             <div className="w-[33%] relative">
@@ -103,8 +99,6 @@ function Admin() {
                         </table>
 
                     </Layout>
-                </div>
-            </div>
         </div>
     )
 }
