@@ -8,6 +8,9 @@ import { HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { timeStamp } from '../Util/time'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import InfromationPopup from '../../Components/InfromationPopup'
 // import timeStamp from "../Util/time"
 
 export default function Estimate() {
@@ -16,6 +19,10 @@ export default function Estimate() {
   const [action, setAction] = useState("")
   const [getEstimateData, setEstimateData] = useState()
   const [startDate, setStartDate] = useState(new Date());
+
+  const [infromation, setInfromation] = useState(false)
+  const [infromationMsg, setInfromationMsg] = useState("")
+  var toastMessage;
 
   const [values, setValues] = useState({
     plan: "",
@@ -32,8 +39,9 @@ export default function Estimate() {
     amount: null,
     date: null
   })
-  const [vaild, setVaild] = useState(false)
-
+  const [vaild, setVaild] = useState(true)
+  const [dataVaildation, setDataVaildation] = useState(false)
+ 
   const popUpHandler = () => {
     setPopUpState(!popUpState)
     setAction("Add")
@@ -63,61 +71,112 @@ export default function Estimate() {
   const getEstimate = () => {
     axios.get("http://localhost:4000/api/getAllEstimate")
       .then((res) => {
-        console.log(res)
-        res.data.getEst.forEach((el) => {
-          var date = new Date(el.date * 1000);
+        var estimate =[]
+        res.data.estimate.forEach((el) => {
+          console.log(el.estimate)
+          var date = new Date(el.year * 1000);
           var months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
           var year = date.getFullYear();
           var month = months[date.getMonth()];
           var date = date.getDate();
-          var time = date+ "/" +month + "/"+ year
+          var time = date + "/" + month + "/" + year
           el.showdate = time
-          console.log(time)
-
-          console.log(date)
+          delete el.estimatePayment
         })
-
-        setEstimateData(res.data.getEst)
+        console.log(res.data.estimate)
+        setEstimateData(res.data)
       })
       .catch((err) => {
         console.log(err)
       })
   }
 
-  console.log(getEstimateData)
   useEffect(() => {
     getEstimate()
   }, [])
+
+
+  const handleInfromation = () => {
+    setInfromation(!infromation)
+  }
+
+  const handleDeleteApiCall = () => {
+    axios.delete(`http://localhost:4000/api/deleteEstimate/${values?._id}`)
+    .then((res) => {
+        console.log(res)
+        toastMessage = " Deleted..."
+        showDeleteMessage()
+        setValues({
+            date: null,
+            name: "",
+            amount: null,
+        })
+        // setDeleteMsg(false)
+        setPopUpState(false)
+        setInfromation(false)
+        getEstimate()
+        setErrors({
+            date: null,
+            name: "",
+            amount: null,
+        })
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+  }
   // console.log(getEstimateData,"Data")
+  const showToastMessage = () => {
+    toast.success(` ${toastMessage} `, {
+        position: toast.POSITION.TOP_RIGHT
+    });
+};
+
+const showDeleteMessage = () => {
+  toast.error(` ${toastMessage} `, {
+      position: toast.POSITION.TOP_RIGHT
+  });
+};
 
   const handleEdit = (v, i) => {
     setPopUpState(true)
-    setValues(v)
+    setAction("Updates")
+    setValues(v.estimate[0])
+    var time = new Date(v.estimate[0].date * 1000)
+    setStartDate(time)
   }
+  console.log(values)
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(errors, values)
     setVaild(true)
-    alert("Hello")
+    setDataVaildation(true)
     var myDate = new Date(startDate); // Your timezone!
     var myEpoch = myDate.getTime() / 1000.0;
     values.date = myEpoch
-    // console.log(myEpoch)
+    var jsonObj = {
+      year: myEpoch,
+      estimate: [
+        values
+      ]
+    }
     if (errors.plan === true && errors.amount === true) {
-      axios.post("http://localhost:4000/api/addEstimate", values)
+      axios.post("http://localhost:4000/api/addEstimate", jsonObj)
         .then((res) => {
           console.log(res)
           setValues({
             plan: "",
             amount: null,
           })
+          setDataVaildation(false)
           setPopUpState(false)
           getEstimate()
           setErrors({
             plan: "",
             amount: null,
           })
+          toastMessage = "Added Successfully"
+          showToastMessage()
         })
         .catch((err) => {
           console.log(err)
@@ -126,12 +185,74 @@ export default function Estimate() {
   }
   const updateHandler = (e) => {
     e.preventDefault();
+    var myDate = new Date(startDate); // Your timezone!
+    var myEpoch = myDate.getTime() / 1000.0;
+    values.date = myEpoch
+    var jsonObj = {
+      year: myEpoch,
+      estimate: [
+        values
+      ]
+    }
+    var selectedId;
+    getEstimateData.forEach((el) => {
+      if (el.estimate[0]?._id === values?._id) {
+        console.log(el)
+        selectedId = el?._id;
+      }
+    })
+    console.log(selectedId, "SleectID")
+    if (errors.plan === true && errors.amount === true) {
+      axios.put(`http://localhost:4000/api/updateEstimate/${selectedId}`, jsonObj)
+        .then((res) => {
+          console.log(res)
+          setValues({
+            plan: "",
+            amount: null,
+          })
+          setDataVaildation(false)
+          setPopUpState(false)
+          getEstimate()
+          setErrors({
+            plan: "",
+            amount: null,
+          })
+          toastMessage = "Updated Successfully"
+          showToastMessage()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+
   }
+
+  const handleDelete = (v, i) => {
+    setInfromationMsg("Delete")
+    setInfromation(true)
+    setValues(v)
+  }
+
+
 
   return (
     <div>
       <Layout>
+        <div className='  grid grid-cols-2'>
+          <div>
         <Button handleClick={popUpHandler} buttonName="Add" className="mb-2" />
+
+          </div>
+          <div className=' flex justify-end'>
+        <div>Total Estimate: </div>
+            
+          </div>
+
+        </div>
+
+        <ToastContainer />
+
+
 
         <PopUp
           state={popUpState}
@@ -139,7 +260,7 @@ export default function Estimate() {
           width={"sm"}
           actionbar={true}
           title={action}
-        // type={popup.type}
+        type={""}
         // message={popup.message}
         // handleClick={popUpHandler}
         >
@@ -151,32 +272,25 @@ export default function Estimate() {
                   id="date" selected={startDate}
                   onChange={(date, e) => setDate(date, e)}
                   className="border p-1  w-full h-[36px] text-sm" />
-                {errors.date}
+                {dataVaildation ? <p>{errors.date}</p> : null}
               </div>
             </div>
             <div>
               <Input type="text" value={values.plan} handleChange={(e) => handleChange(e)} label="Estimate Plan" name="plan" />
-              <div className='text-[#dd0821] text-tiny pt-1'>{errors.plan}</div>
+              {/* <div ></div> */}
+              {dataVaildation ? <div className='text-[#dd0821] text-tiny pt-1'>{errors.plan}</div> : null}
             </div>
-
             <div>
               <Input type="number" label="Estimate Amount" value={values.amount} handleChange={(e) => handleChange(e)} name="amount" />
-              <div className='text-[#dd0821] text-tiny pt-1'>{errors.amount}</div>
-
+              {dataVaildation ? <div className='text-[#dd0821] text-tiny pt-1'>{errors.amount}</div> : null}
+              {/* <div ></div> */}
             </div>
-
-
-
           </div>
-
-
           <div className=' flex justify-end px-4'>
             <Button buttonName="Cancel" handleClick={popUpHandler} className="mx-2 mt-4 mb-4" />
             {action === "Add" ? <Button buttonName="Add" handleClick={submitHandler} className="mt-4 mb-4" /> :
               <Button buttonName="Update" handleClick={updateHandler} className="mt-4 mb-4" />}
           </div>
-
-
         </PopUp>
 
         <table className=' w-full'>
@@ -191,23 +305,42 @@ export default function Estimate() {
             </tr>
           </thead>
           <tbody>
-            {getEstimateData?.map((v, i) => {
-              // //console.log(i%2)
+            {getEstimateData?.estimate?.map((v, i) => {
               return (
-                <tr className={`${i % 2 === 1 ? "td" : null} `}>
+                <tr key={i} className={`${i % 2 === 1 ? "td" : null} `}>
                   <td className=' px-4 text-text-color text-sm py-2'>{i}</td>
                   <td className=' px-4 text-text-color text-sm py-2'>{v?.showdate}</td>
-                  <td className=' px-4 text-text-color text-sm py-2'>{v?.plan}</td>
-                  <td className=' px-4 text-text-color text-sm py-2'>{v?.amount}</td>
+                  <td className=' px-4 text-text-color text-sm py-2'>{v?.estimate[0]?.plan}</td>
+                  <td className=' px-4 text-[#dd0821]  text-sm py-2'>{v?.estimate[0]?.amount}</td>
                   <td className='h-full flex justify-center px-4 text-text-color text-sm py-3 w-[50px]'><HiOutlinePencilAlt onClick={() => handleEdit(v, i)} className='text-[#50933e] hover:text-[#1e6510] duration-300 hover:cursor-pointer' /></td>
-                  <td className=' px-8 text-text-color text-sm py-2 w-[50px]'><HiOutlineTrash className='hover:text-[#ff554b] hover:cursor-pointer duration-300 text-[#dd0821]' /></td>
+                  <td className=' px-8 text-text-color text-sm py-2 w-[50px]'><HiOutlineTrash onClick={() => handleDelete(v, i)} className='hover:text-[#ff554b] hover:cursor-pointer duration-300 text-[#dd0821]' /></td>
 
                 </tr>
               )
             })}
+            <tr className=' bg-[#ffd4cc]'>
+              <td></td>
+              <td></td>
+              <td className=' px-4 text-[#dd0821] text-sm py-2'>Total Amount</td>
+              <td className='px-4  text-[#dd0821] text-sm py-2'>{getEstimateData?.total_Amount}</td>
+              <td className='px-4 py-2'></td>
+
+              <td  className='px-4 py-2'></td>
+
+            </tr>
           </tbody>
 
         </table>
+
+        <InfromationPopup handleClick={handleInfromation} state={infromation} title={infromationMsg} actionbar={true}>
+          <div className='py-4 px-10 text-h5 font-semibold text-text-color text-center'>Did You want to Delete thie Record?</div>
+          <div className=' flex justify-end pb-2'>
+            <Button buttonName="Cancel" className="mr-4" handleClick={handleInfromation} />
+            <Button buttonName="Conform" className="mr-4" handleClick={handleDeleteApiCall} />
+
+
+          </div>
+        </InfromationPopup>
 
       </Layout>
     </div>

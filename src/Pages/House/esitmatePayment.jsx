@@ -8,6 +8,8 @@ import { HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import InfromationPopup from '../../Components/InfromationPopup'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function EsitmatePayment() {
     const [popUpState, setPopUpState] = useState(false)
@@ -19,19 +21,23 @@ export default function EsitmatePayment() {
     const [action, setAction] = useState("")
     const [getEstimateData, setEstimateData] = useState()
     const [startDate, setStartDate] = useState(new Date());
+    var toastMessage;
+
 
     const [values, setValues] = useState({
         date: null,
-        name: "",
+        details: "",
         amount: null,
     })
 
     const [errors, setErrors] = useState({
         date: null,
-        name: "",
+        details: "",
         amount: null,
     })
-    const [vaild, setVaild] = useState(false)
+    const [vaild, setVaild] = useState(true)
+  const [dataVaildation, setDataVaildation] = useState(false)
+
 
     const setDate = (date, e) => {
         setStartDate(date)
@@ -49,11 +55,15 @@ export default function EsitmatePayment() {
         })
     }
 
+    
+
+
+
     if (vaild === true) {
-        if (values.name === "" || values.name === undefined) {
-            errors.name = "Required"
+        if (values.details === "" || values.details === undefined) {
+            errors.details = "Required"
         } else {
-            errors.name = true
+            errors.details = true
         }
 
         if (values.amount === "" || values.amount === undefined || values.amount === null) {
@@ -68,7 +78,7 @@ export default function EsitmatePayment() {
             .then((res) => {
                 console.log(res)
                 res.data.data.forEach(element => {
-                    let date = new Date(element.date * 1000).toLocaleDateString()
+                    let date = new Date(element.year * 1000).toLocaleDateString()
                     element.showdate = date
                 });
                 console.log(res.data.data)
@@ -84,14 +94,25 @@ export default function EsitmatePayment() {
 
     const handleEdit = (v, i) => {
         setPopUpState(true)
-        let date = new Date(v?.date * 1000)
-        console.log(date)
-        setStartDate(date)
-        setValues(v)
-        setAction("Update")
+        setAction("Updates")
+        setValues(v.estimatePayment[0])
+        var time = new Date(v.estimatePayment[0].date * 1000)
+        setStartDate(time)
     }
 
-  
+    const showToastMessage = () => {
+        toast.success(` ${toastMessage} `, {
+            position: toast.POSITION.TOP_RIGHT
+        });
+    };
+
+    const showDeleteMessage = () => {
+        toast.error(` ${toastMessage} `, {
+            position: toast.POSITION.TOP_RIGHT
+        });
+    };
+
+
     const echoConverter = (date) => {
         var myDate = new Date(date);
         setDeleteMsg(!deleteMsg)
@@ -105,23 +126,35 @@ export default function EsitmatePayment() {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        console.log(errors, values)
-        values.date = echoConverter(startDate)
+        setDataVaildation(true)
         setVaild(true)
-        if (errors.name === true && errors.amount === true) {
-            axios.post("http://localhost:4000/api/addEstimatePayment", values)
+        var myDate = new Date(startDate); // Your timezone!
+        var myEpoch = myDate.getTime() / 1000.0;
+        values.date = myEpoch
+        var jsonObj = {
+            year: myEpoch,
+            estimatePayment: [
+                values
+            ]
+        }
+        if (errors.details === true && errors.amount === true) {
+            axios.post("http://localhost:4000/api/addEstimatePayment", jsonObj)
                 .then((res) => {
                     console.log(res)
                     setValues({
                         date: null,
-                        name: "",
+                        details: "",
                         amount: null,
                     })
+                    setDataVaildation(false)
+                    toastMessage = " Added Successfully..."
+                    showToastMessage()
+
                     setPopUpState(false)
                     getEstimate()
                     setErrors({
                         date: null,
-                        name: "",
+                        details: "",
                         amount: null,
                     })
                 })
@@ -132,27 +165,48 @@ export default function EsitmatePayment() {
     }
     const updateHandler = (e) => {
         e.preventDefault();
-        setVaild(true)
-        values.date = echoConverter(startDate)
-        axios.put(`http://localhost:4000/api/updateEstimatePayment/${values?._id}`, values)
-            .then((res) => {
-                console.log(res)
-                setValues({
-                    date: null,
-                    name: "",
-                    amount: null,
+
+        var myDate = new Date(startDate); // Your timezone!
+        var myEpoch = myDate.getTime() / 1000.0;
+        values.date = myEpoch
+        var jsonObj = {
+            year: myEpoch,
+            estimatePayment: [
+                values
+            ]
+        }
+        var selectedId;
+        getEstimateData.forEach((el) => {
+            if (el.estimatePayment[0]?._id === values?._id) {
+                console.log(el)
+                selectedId = el?._id;
+            }
+        })
+        if (errors.amount === true && errors.details === true) {
+            axios.put(`http://localhost:4000/api/updateEstimatePayment/${selectedId}`, jsonObj)
+                .then((res) => {
+                    console.log(res)
+                    setValues({
+                        date: null,
+                        details: "",
+                        amount: null,
+                    })
+                    setDataVaildation(false)
+                    toastMessage = " Updated Successfully..."
+                    showToastMessage()
+
+                    setPopUpState(false)
+                    getEstimate()
+                    setErrors({
+                        date: null,
+                        details: "",
+                        amount: null,
+                    })
                 })
-                setPopUpState(false)
-                getEstimate()
-                setErrors({
-                    date: null,
-                    name: "",
-                    amount: null,
+                .catch((err) => {
+                    console.log(err)
                 })
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+        }
     }
 
     const handleDelete = (v, i) => {
@@ -168,16 +222,19 @@ export default function EsitmatePayment() {
                 console.log(res)
                 setValues({
                     date: null,
-                    name: "",
+                    details: "",
                     amount: null,
                 })
+                toastMessage = " Deleted..."
+                showDeleteMessage()
+                setDataVaildation(false)
                 setDeleteMsg(false)
                 setPopUpState(false)
                 setInfromation(false)
                 getEstimate()
                 setErrors({
                     date: null,
-                    name: "",
+                    details: "",
                     amount: null,
                 })
             })
@@ -188,6 +245,8 @@ export default function EsitmatePayment() {
     return (
         <div>
             <Layout>
+        <ToastContainer />
+
                 <Button handleClick={popUpHandler} buttonName="Add" className="mb-2" />
 
                 <PopUp
@@ -212,13 +271,14 @@ export default function EsitmatePayment() {
                             </div>
                         </div>
                         <div>
-                            <Input type="text" value={values.name} handleChange={(e) => handleChange(e)} label="Need to Give" name="name" />
-                            <div className='text-[#dd0821] text-tiny pt-1'>{errors.name}</div>
+                            <Input type="text" value={values.details} handleChange={(e) => handleChange(e)} label="Need to Give" name="details" />
+                            {dataVaildation ?<div className='text-[#dd0821] text-tiny pt-1'>{errors.details}</div> :null }
                         </div>
 
                         <div>
                             <Input type="number" label="Estimate Amount" value={values.amount} handleChange={(e) => handleChange(e)} name="amount" />
-                            <div className='text-[#dd0821] text-tiny pt-1'>{errors.amount}</div>
+                            
+                            {dataVaildation ?<div className='text-[#dd0821] text-tiny pt-1'>{errors.amount}</div> :null }
 
                         </div>
 
@@ -254,8 +314,8 @@ export default function EsitmatePayment() {
                                 <tr className={`${i % 2 === 1 ? "td" : null} `}>
                                     <td className=' px-4 text-text-color text-sm py-2'>{i}</td>
                                     <td className=' px-4 text-text-color text-sm py-2'>{v?.showdate}</td>
-                                    <td className=' px-4 text-text-color text-sm py-2'>{v?.name}</td>
-                                    <td className=' px-4 text-[#dd0821] text-sm py-2'>{v?.amount}</td>
+                                    <td className=' px-4 text-text-color text-sm py-2'>{v?.estimatePayment[0]?.details}</td>
+                                    <td className=' px-4 text-[#dd0821] text-sm py-2'>{v?.estimatePayment[0]?.amount}</td>
                                     <td className='h-full flex justify-center px-4 text-text-color text-sm py-3 w-[50px]'><HiOutlinePencilAlt onClick={() => handleEdit(v, i)} className='text-[#50933e] hover:text-[#1e6510] duration-300 hover:cursor-pointer' /></td>
                                     <td className=' px-8 text-text-color text-sm py-2 w-[50px]'><HiOutlineTrash onClick={() => handleDelete(v, i)} className='hover:text-[#ff554b] hover:cursor-pointer duration-300 text-[#dd0821]' /></td>
 
@@ -266,10 +326,10 @@ export default function EsitmatePayment() {
                 </table>
 
                 <InfromationPopup handleClick={handleInfromation} state={infromation} title={infromationMsg} actionbar={true}>
-                    <div className='py-4 px-10 text-h5 text-text-color text-center'>Did You want to Delete?</div>
+                    <div className='py-4 px-10 text-h5 font-semibold text-text-color text-center'>Did You want to Delete thie Record?</div>
                     <div className=' flex justify-end pb-2'>
                         <Button buttonName="Cancel" className="mr-4" handleClick={handleInfromation} />
-                        <Button buttonName="Delete" className="mr-4" handleClick={handleDeleteApiCall} />
+                        <Button buttonName="Conform" className="mr-4" handleClick={handleDeleteApiCall} />
 
 
                     </div>
