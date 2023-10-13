@@ -4,7 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './store';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
+
+// console.log(useSelector((state) => state))
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

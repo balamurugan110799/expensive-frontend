@@ -195,7 +195,9 @@ const showDeleteMessage = () => {
       ]
     }
     var selectedId;
-    getEstimateData.forEach((el) => {
+    // alert("Hello")
+    getEstimateData?.estimate?.forEach((el) => {
+      console.log(getEstimateData)
       if (el.estimate[0]?._id === values?._id) {
         console.log(el)
         selectedId = el?._id;
@@ -293,6 +295,7 @@ const showDeleteMessage = () => {
           </div>
         </PopUp>
 
+        <div className=' h-[300px] overflow-auto'>
         <table className=' w-full'>
           <thead>
             <tr className='bg-primary text-[#fff]'>
@@ -324,21 +327,20 @@ const showDeleteMessage = () => {
               <td className=' px-4 text-[#dd0821] text-sm py-2'>Total Amount</td>
               <td className='px-4  text-[#dd0821] text-sm py-2'>{getEstimateData?.total_Amount}</td>
               <td className='px-4 py-2'></td>
-
               <td  className='px-4 py-2'></td>
-
             </tr>
           </tbody>
 
         </table>
+        </div>
+
+      
 
         <InfromationPopup handleClick={handleInfromation} state={infromation} title={infromationMsg} actionbar={true}>
           <div className='py-4 px-10 text-h5 font-semibold text-text-color text-center'>Did You want to Delete thie Record?</div>
           <div className=' flex justify-end pb-2'>
             <Button buttonName="Cancel" className="mr-4" handleClick={handleInfromation} />
             <Button buttonName="Conform" className="mr-4" handleClick={handleDeleteApiCall} />
-
-
           </div>
         </InfromationPopup>
 

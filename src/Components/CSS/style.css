@@ -2,6 +2,9 @@
     font-family: 'Poppins', sans-serif;
     font-size: 14px;
 }
+html,body{
+  overflow: hidden;
+}
 .grid{
     display: grid;
 }
@@ -68,6 +71,5 @@ input[type=number]::-webkit-inner-spin-button {
   
 
   .react-datepicker-popper{
-    z-index: 9999!important;
+    z-index: 10!important;
   }
-  

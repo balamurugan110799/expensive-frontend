@@ -41,7 +41,7 @@ module.exports = {
       'whatsapp': '#188500',
       'linkidn': '#0077B5',
       'thumbs': '#8C191B',
-      'error': '#8a0000',
+      'error': '#dd0821',
       'alert': '#857a00',
       'lightBlue': '#deebfa',
       'bluecontact':'#4A90E2',

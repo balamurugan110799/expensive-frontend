@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Sidebar() {
 
     // console.log(sessionStorage.getItem("role"))
-    const auth = sessionStorage.getItem("auth")
+    // const auth = sessionStorage.getItem("auth")
     const role = sessionStorage.getItem("role")
 
     return (
@@ -26,7 +26,7 @@ function Sidebar() {
                         <>
                             <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/esitmate-payment">Esitmate Payment</Link></li>
 
-                            <li  className="mb-3"><Link className="text-white tracking-wider py-2" to="/esitmate">Esitmate</Link></li>
+                            <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/esitmate">Esitmate</Link></li>
 
                             <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/importance">Importance</Link></li>
                             <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/extra-expensive">Extra Expansive</Link></li>
@@ -37,10 +37,14 @@ function Sidebar() {
 
                     {role === "super-admin" ?
                         <>
-                            <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/gold">Gold</Link></li>
+                            {/* <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/gold">Gold</Link></li>
                             <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/importance">Importance</Link></li>
-                            <li><Link className="text-white tracking-wider py-2" to="/extra-expensive">Extra Expansive</Link></li>
-                            <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/admin">Admin</Link></li>
+                            <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/extra-expensive">Extra Expansive</Link></li>
+                            <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/amount-entry">Amount Entry</Link></li> */}
+                            <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/income">Income Entry</Link></li>
+                            <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/expensive">Expensive</Link></li>
+
+                            {/* <li className="mb-3"><Link className="text-white tracking-wider py-2" to="/admin">Admin</Link></li> */}
                         </>
                         : null
                     }
@@ -53,4 +57,4 @@ function Sidebar() {
     )
 }
 
-export default Sidebar
+export default React.memo(Sidebar)

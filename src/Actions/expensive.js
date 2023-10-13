@@ -13,10 +13,13 @@ const expensive = createSlice({
             let data = state.total_amount - action.payload
            state.total_amount =data
             // state
+        },
+        reducerExpensive:(state,action)=>{
+            console.log(action.payload,"payload")
         }
     }
 })
 
-export const  {reduceramount} = expensive.actions
+export const  {reduceramount, reducerExpensive} = expensive.actions
 
 export default expensive.reducer

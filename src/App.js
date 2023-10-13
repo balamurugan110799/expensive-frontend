@@ -11,6 +11,9 @@ import Gold from './Pages/Gold/Gold';
 import CreateYear from './Pages/Expensive/CreateYear';
 import EsitmatePayment from './Pages/House/esitmatePayment';
 import Estimate from './Pages/House/Estimate';
+import AmountEntry from './Pages/Expensive/AmountEntry';
+import Income from './Pages/House/Admin/Income';
+import Expensive from './Pages/Expensive/Expensive';
 
 function App() {
 
@@ -32,6 +35,7 @@ function App() {
               <Route path="/importance" element={<Importance />} />
               <Route path="/extra-expensive" element={<ExtraExpensive />} />
               <Route path="/create-year" element={<CreateYear />} />
+              <Route path="/amount-entry" element={<AmountEntry />} />
 
             </>
             :
@@ -52,7 +56,7 @@ function App() {
               <Route path="/esitmate" element={<Estimate />} />
 
 
-              
+
               <Route path="/create-year" element={<CreateYear />} />
             </>
             :
@@ -70,6 +74,12 @@ function App() {
               <Route path="/extra-expensive" element={<ExtraExpensive />} />
               <Route path="/importance" element={<Importance />} />
               <Route path="/gold" element={<Gold />} />
+              <Route path="/amount-entry" element={<AmountEntry />} />
+              <Route path="/income" element={<Income />} />
+              <Route path="/expensive" element={<Expensive />} />
+
+
+
             </>
             :
             <>

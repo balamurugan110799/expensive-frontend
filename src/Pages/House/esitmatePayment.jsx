@@ -36,7 +36,7 @@ export default function EsitmatePayment() {
         amount: null,
     })
     const [vaild, setVaild] = useState(true)
-  const [dataVaildation, setDataVaildation] = useState(false)
+    const [dataVaildation, setDataVaildation] = useState(false)
 
 
     const setDate = (date, e) => {
@@ -55,7 +55,7 @@ export default function EsitmatePayment() {
         })
     }
 
-    
+
 
 
 
@@ -82,7 +82,7 @@ export default function EsitmatePayment() {
                     element.showdate = date
                 });
                 console.log(res.data.data)
-                setEstimateData(res.data.data)
+                setEstimateData(res.data)
             })
             .catch((err) => {
                 console.log(err)
@@ -175,14 +175,15 @@ export default function EsitmatePayment() {
                 values
             ]
         }
+
         var selectedId;
-        getEstimateData.forEach((el) => {
+        getEstimateData?.data?.forEach((el) => {
             if (el.estimatePayment[0]?._id === values?._id) {
                 console.log(el)
                 selectedId = el?._id;
             }
         })
-        if (errors.amount === true && errors.details === true) {
+        alert("Hello")
             axios.put(`http://localhost:4000/api/updateEstimatePayment/${selectedId}`, jsonObj)
                 .then((res) => {
                     console.log(res)
@@ -206,7 +207,7 @@ export default function EsitmatePayment() {
                 .catch((err) => {
                     console.log(err)
                 })
-        }
+        // }
     }
 
     const handleDelete = (v, i) => {
@@ -242,10 +243,18 @@ export default function EsitmatePayment() {
                 console.log(err)
             })
     }
+    let str = getEstimateData?.need_to_give;
+    let newStr = str?.toString();
+    // let str = "Hello World!";
+let amount = newStr?.substring(1);
+    // let subString
+
+    console.log(amount)
+
     return (
         <div>
             <Layout>
-        <ToastContainer />
+                <ToastContainer />
 
                 <Button handleClick={popUpHandler} buttonName="Add" className="mb-2" />
 
@@ -272,13 +281,13 @@ export default function EsitmatePayment() {
                         </div>
                         <div>
                             <Input type="text" value={values.details} handleChange={(e) => handleChange(e)} label="Need to Give" name="details" />
-                            {dataVaildation ?<div className='text-[#dd0821] text-tiny pt-1'>{errors.details}</div> :null }
+                            {dataVaildation ? <div className='text-[#dd0821] text-tiny pt-1'>{errors.details}</div> : null}
                         </div>
 
                         <div>
                             <Input type="number" label="Estimate Amount" value={values.amount} handleChange={(e) => handleChange(e)} name="amount" />
-                            
-                            {dataVaildation ?<div className='text-[#dd0821] text-tiny pt-1'>{errors.amount}</div> :null }
+
+                            {dataVaildation ? <div className='text-[#dd0821] text-tiny pt-1'>{errors.amount}</div> : null}
 
                         </div>
 
@@ -296,9 +305,10 @@ export default function EsitmatePayment() {
 
                 </PopUp>
 
+                <div className=' h-[400px] overflow-auto'>
                 <table className=' w-full'>
-                    <thead>
-                        <tr className='bg-primary text-[#fff]'>
+                    <thead className=' relative'>
+                        <tr className='bg-primary sticky top-0  text-[#fff]'>
                             <td className=' px-4 text-left py-2'>S.No</td>
                             <td className=' px-4 text-left py-2'>Date</td>
                             <td className=' px-4 text-left py-2'>Depands</td>
@@ -308,7 +318,7 @@ export default function EsitmatePayment() {
                         </tr>
                     </thead>
                     <tbody>
-                        {getEstimateData?.map((v, i) => {
+                        {getEstimateData?.data?.map((v, i) => {
                             // //console.log(i%2)
                             return (
                                 <tr className={`${i % 2 === 1 ? "td" : null} `}>
@@ -322,8 +332,30 @@ export default function EsitmatePayment() {
                                 </tr>
                             )
                         })}
+                        
+                        <tr className=' bg-[#ffd4cc]   sticky bottom-10'>
+                            <td></td>
+                            <td></td>
+                            <td className=' px-4 text-[#dd0821] text-sm py-2'>Total Amount</td>
+                            <td className='px-4  text-[#dd0821] text-sm py-2'>{getEstimateData?.total}</td>
+                            <td className='px-4 py-2'></td>
+                            <td className='px-4 py-2'></td>
+                        </tr>
+                        {}
+
+                        <tr className={` ${getEstimateData?.need_to_give <= 0 ? "bg-[#beffa8]" : "bg-[#ffd4cc]"}  sticky bottom-0  `}>
+                            <td></td>
+                            <td></td>
+                            <td className={` ${getEstimateData?.need_to_give <= 0 ? "text-[#228800]":" text-[#dd0821]"} px-4 text-sm py-2`}>{getEstimateData?.need_to_give <= 0 ? <p>Extra amount given</p>:<p>Need to give</p>}</td>
+                            <td className={` ${getEstimateData?.need_to_give <= 0 ? "text-[#228800]":" text-[#dd0821]"} px-4  text-sm py-2`}>{getEstimateData?.need_to_give <= 0 ? <p>+ {amount}</p>:<p>{getEstimateData?.need_to_give}</p>}</td>
+                            <td className='px-4 py-2'></td>
+                            <td className='px-4 py-2'></td>
+                        </tr>
                     </tbody>
                 </table>
+
+                </div>
+
 
                 <InfromationPopup handleClick={handleInfromation} state={infromation} title={infromationMsg} actionbar={true}>
                     <div className='py-4 px-10 text-h5 font-semibold text-text-color text-center'>Did You want to Delete thie Record?</div>

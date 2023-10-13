@@ -68,8 +68,12 @@ function Login() {
           console.log(res.data)
           const token = res.data.token
           const role = res.data.role
+          const time = new Date()
+          const echoConvert = time.getTime()  / 1000.0;
+          console.log(echoConvert)
           sessionStorage.setItem("auth", token)
           sessionStorage.setItem("role", role)
+          sessionStorage.setItem("time", echoConvert)
 
           navigate('/dashboard')
           window.location.href = '/dashboard';
