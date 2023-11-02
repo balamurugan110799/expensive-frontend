@@ -5,40 +5,69 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import YearSlice, { yearGetAPI } from "../Actions/YearSlice";
 import { BsWallet2 } from "react-icons/bs";
+import axios from "axios";
+import MonthsSlice, { monthGetAPI } from "../Actions/MonthsSlice";
 
 function Layout(props) {
     const amount = useSelector(state => state.total_amount.total_amount)
     const [startDate, setStartDate] = useState(new Date());
 
     const year = useSelector((state) => state)
+    const data = useSelector((state => state.year))
     // const dispatch = useDispatch
-    // console.log(year)
+    // //(year)
+
+    var income = [];
+    //(data?.year,"data year")
+
+    data?.year.forEach((el) => {
+        if (el?.income.length === 1) {
+            income.push(el)
+        }
+
+    })
+
+    //(income)
+
 
 
     const renderMonthContent = (month, shortMonth, longMonth) => {
         const tooltipText = `Tooltip for month: ${longMonth}`;
-        console.log(shortMonth, longMonth, month)
+        //(shortMonth, longMonth, month)
         return <span title={tooltipText}>{shortMonth}</span>;
     };
     const dispatch = useDispatch()
-    useEffect(()=>{
+    useEffect(() => {
         // dispatch(YearSlice())
 
-    },[])
+    }, [])
 
 
     const setDate = (date, e) => {
         var time = date.getTime() / 1000
         sessionStorage.setItem("time", time);
-        dispatch(yearGetAPI(time))
+        dispatch(yearGetAPI())
+
+        dispatch(MonthsSlice())
+        dispatch(MonthsSlice(time))
+        monthData()
         setStartDate(date)
+    }
+
+    const monthData = () => {
+        alert("hloo")
+        // dispatch(MonthsSlice())
     }
 
     useEffect(() => {
         dispatch(yearGetAPI())
+        // dispatch(monthGetAPI())
     }, [])
 
 
+
+
+console.log(useSelector(state=>state.expensive),"datattaa")
     return (
         <div>
             <div className=" overflow-hidden">
@@ -64,11 +93,11 @@ function Layout(props) {
                         </div>
                     </div>
                     <div className=" col-span-2">
-                        
-                    <div className="flex justify-end mx-4 py-6">
-                                <BsWallet2 className="my-2.5 text-primary"/>
-                                <span className="px-2 text-error leading-[34px] font-semibold">{amount}</span>
-                            </div>
+
+                        <div className="flex justify-end mx-4 py-6">
+                            <BsWallet2 className="my-2.5 text-primary" />
+                            <span className="px-2 text-error leading-[34px] font-semibold">{data?.year[0]?.income[0]?.total_amount}</span>
+                        </div>
                     </div>
                 </div>
                 <div className=" grid grid-cols-12">

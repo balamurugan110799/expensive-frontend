@@ -13,7 +13,7 @@ const timeStampSlice =  createSlice({
        timeStampAdd:(state,action)=>{
             state.timestamp = action.payload
             state.status="success"
-            // console.log(action.payload)
+            // //(action.payload)
        }
     }
 })

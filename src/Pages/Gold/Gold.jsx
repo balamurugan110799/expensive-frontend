@@ -18,7 +18,7 @@ export default function Gold() {
 
   const [startDate, setStartDate] = useState(new Date() );
   const [getGold, setGetGold] = useState()
-  console.log(startDate)
+  //(startDate)
 
   const [values, setValues] = useState({
     date: "",
@@ -54,7 +54,7 @@ export default function Gold() {
   const handleEdit = (v, i) => {
     setValues(v)
     setPopUpState(true)
-    console.log(v?.date)
+    //(v?.date)
     // setStartDate(v?.date)
     setAction("Update")
   }
@@ -113,10 +113,10 @@ export default function Gold() {
   const updateHandler = (e) => {
     e.preventDefault();
     setVaild(true)
-    //console.log(values)
+    ////(values)
     axios.put(`http://localhost:4000/api/updateGold/${values._id}`, values)
       .then((res) => {
-        //console.log(res)
+        ////(res)
         setValues({
           date: "",
           weight: "",
@@ -138,7 +138,7 @@ export default function Gold() {
         setStartDate("")
       })
       .catch((err) => {
-        //console.log(err)
+        ////(err)
       })
   }
   const submitHandler = (e) => {
@@ -148,7 +148,7 @@ export default function Gold() {
     if (errors.total === true && errors.price === true && errors.gst === true && errors.eachPrice === true && errors.weight === true && errors.date === true) {
       axios.post("http://localhost:4000/api/addGold", values)
         .then((res) => {
-          //console.log(res)
+          ////(res)
           setErrors({
             date: "",
             weight: "",
@@ -162,7 +162,7 @@ export default function Gold() {
 
         })
         .catch((err) => {
-          //console.log(err)
+          ////(err)
 
         })
     }
@@ -172,18 +172,18 @@ export default function Gold() {
   const getGoldData = () => {
     axios.get("http://localhost:4000/api/getGold")
       .then((res) => {
-        //console.log(res)
+        ////(res)
         setGetGold(res.data.data)
       })
       .catch((err) => {
-        //console.log(err)
+        ////(err)
       })
   }
 
   useEffect(() => {
     getGoldData()
   }, [])
-  //console.log(values.weight)
+  ////(values.weight)
 
   return (
     <div>
@@ -270,7 +270,7 @@ export default function Gold() {
           </thead>
           <tbody>
             {getGold?.map((v, i) => {
-              // //console.log(i%2)
+              // ////(i%2)
               return (
                 <tr className={`${i % 2 === 1 ? "td" : null} `}>
                   <td className=' px-4 text-text-color text-sm py-2'>{i}</td>

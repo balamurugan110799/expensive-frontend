@@ -2,7 +2,7 @@ import React from "react";
 
 function SelectDropDown(props) {
     const { label, optionValue,value, handleChange, name, className ,setNameOption} = props
-    // console.log(value)
+    // //(value)
     return (
         <div className="block w-full">
             <div>

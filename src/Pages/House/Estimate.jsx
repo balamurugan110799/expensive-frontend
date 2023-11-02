@@ -73,7 +73,7 @@ export default function Estimate() {
       .then((res) => {
         var estimate =[]
         res.data.estimate.forEach((el) => {
-          console.log(el.estimate)
+          //(el.estimate)
           var date = new Date(el.year * 1000);
           var months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
           var year = date.getFullYear();
@@ -83,11 +83,11 @@ export default function Estimate() {
           el.showdate = time
           delete el.estimatePayment
         })
-        console.log(res.data.estimate)
+        //(res.data.estimate)
         setEstimateData(res.data)
       })
       .catch((err) => {
-        console.log(err)
+        //(err)
       })
   }
 
@@ -103,7 +103,7 @@ export default function Estimate() {
   const handleDeleteApiCall = () => {
     axios.delete(`http://localhost:4000/api/deleteEstimate/${values?._id}`)
     .then((res) => {
-        console.log(res)
+        //(res)
         toastMessage = " Deleted..."
         showDeleteMessage()
         setValues({
@@ -122,10 +122,10 @@ export default function Estimate() {
         })
     })
     .catch((err) => {
-        console.log(err)
+        //(err)
     })
   }
-  // console.log(getEstimateData,"Data")
+  // //(getEstimateData,"Data")
   const showToastMessage = () => {
     toast.success(` ${toastMessage} `, {
         position: toast.POSITION.TOP_RIGHT
@@ -145,7 +145,7 @@ const showDeleteMessage = () => {
     var time = new Date(v.estimate[0].date * 1000)
     setStartDate(time)
   }
-  console.log(values)
+  //(values)
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -163,7 +163,7 @@ const showDeleteMessage = () => {
     if (errors.plan === true && errors.amount === true) {
       axios.post("http://localhost:4000/api/addEstimate", jsonObj)
         .then((res) => {
-          console.log(res)
+          //(res)
           setValues({
             plan: "",
             amount: null,
@@ -179,7 +179,7 @@ const showDeleteMessage = () => {
           showToastMessage()
         })
         .catch((err) => {
-          console.log(err)
+          //(err)
         })
     }
   }
@@ -197,17 +197,17 @@ const showDeleteMessage = () => {
     var selectedId;
     // alert("Hello")
     getEstimateData?.estimate?.forEach((el) => {
-      console.log(getEstimateData)
+      //(getEstimateData)
       if (el.estimate[0]?._id === values?._id) {
-        console.log(el)
+        //(el)
         selectedId = el?._id;
       }
     })
-    console.log(selectedId, "SleectID")
+    //(selectedId, "SleectID")
     if (errors.plan === true && errors.amount === true) {
       axios.put(`http://localhost:4000/api/updateEstimate/${selectedId}`, jsonObj)
         .then((res) => {
-          console.log(res)
+          //(res)
           setValues({
             plan: "",
             amount: null,
@@ -223,7 +223,7 @@ const showDeleteMessage = () => {
           showToastMessage()
         })
         .catch((err) => {
-          console.log(err)
+          //(err)
         })
     }
 

@@ -8,11 +8,11 @@ import { useState } from "react";
 import axios from "axios";
 function Dashboard() {
     const today = new Date();
-    // //console.log(today)
+    // ////(today)
     var claimedDate = today.toDateString().split(" ");
     const [gold, setGold] = useState()
     // var dateSplit = today.split("")
-    //console.log(claimedDate)
+    ////(claimedDate)
     // const [Months,setMonths]=useState([
     //     "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"
     // ])
@@ -179,12 +179,12 @@ function Dashboard() {
             el.status = true
             flag = true
             currentMont.push(el)
-            // //console.log(`${flag}`)
+            // ////(`${flag}`)
         } else {
-            //console.log(flag)
+            ////(flag)
             if (flag === true) {
                 currentMont.push(el)
-                //console.log(el)
+                ////(el)
             }
             if (flag === false) {
                 monObj.push(el)
@@ -192,21 +192,21 @@ function Dashboard() {
         }
     })
 
-    //console.log(currentMont)
-    //console.log(monObj)
+    ////(currentMont)
+    ////(monObj)
 
     const currentdata = currentMont.concat(monObj)
-    //console.log(currentdata)
+    ////(currentdata)
     var renderValues = []
 
     const getGold = () => {
         axios.get("http://localhost:4000/api/getGoldCal")
             .then((res) => {
-                console.log(res)
+                //(res)
                 setGold(res.data)
             })
             .catch((err) => {
-                console.log(err)
+                //(err)
             })
     }
 
@@ -216,7 +216,7 @@ function Dashboard() {
     }, [])
 
 
-    //console.log(currentdata[0].month)
+    ////(currentdata[0].month)
     return (
         <div>
 

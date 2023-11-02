@@ -10,11 +10,11 @@ import { reduceramount } from "../Actions/expensive"
 
 
 function Importance() {
-    // console.log(useSelector(state=>state.total_amount))
+    // //(useSelector(state=>state.total_amount))
     const amount_store = useSelector(state => state.total_amount.total_amount)
     const dispatch = useDispatch()
     const [reduceAmount, setreduceAmount] = useState()
-    console.log(amount_store)
+    //(amount_store)
     const [dataJson, setJsonValue] = useState([
     ])
     const [data, setData] = useState({
@@ -66,7 +66,7 @@ function Importance() {
         setData(data)
     }
 
-    //console.log(data)
+    ////(data)
     const setDate = (date, e) => {
         setStartDate(date)
     }
@@ -79,7 +79,7 @@ function Importance() {
         } else {
             error.expensive = ""
         }
-        //console.log(data.expensive)
+        ////(data.expensive)
     }
 
     const handleClick = (e) => {
@@ -139,7 +139,7 @@ function Importance() {
                 setOptionData(res.data)
             })
             .catch((err) => {
-                //console.log(err)
+                ////(err)
             })
     }
 

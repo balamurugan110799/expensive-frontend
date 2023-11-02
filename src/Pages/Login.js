@@ -65,12 +65,12 @@ function Login() {
       axios.post('http://localhost:4000/api/user/login', data)
         .then((res) => {
           // alert("Hello")
-          console.log(res.data)
+          //(res.data)
           const token = res.data.token
           const role = res.data.role
           const time = new Date()
           const echoConvert = time.getTime()  / 1000.0;
-          console.log(echoConvert)
+          //(echoConvert)
           sessionStorage.setItem("auth", token)
           sessionStorage.setItem("role", role)
           sessionStorage.setItem("time", echoConvert)
@@ -85,7 +85,7 @@ function Login() {
           // }) 
         })
         .catch((err) => {
-          console.log(err)
+          //(err)
           setForceRender(!forceRender)
           dbMessage.email = err?.response?.data?.message_email;
           dbMessage.password = err?.response?.data?.message_password;
@@ -95,7 +95,7 @@ function Login() {
           if (dbMessage.password === undefined) {
             dbMessage.password = ""
           }
-          console.log(dbMessage?.password.length > 0)
+          //(dbMessage?.password.length > 0)
           // setdbMessage(err.response.data.message_email)
         })
     }

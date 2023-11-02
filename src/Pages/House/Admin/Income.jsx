@@ -11,7 +11,7 @@ import PopUp from '../../../Components/Popup';
 import axios from 'axios';
 import InfromationPopup from '../../../Components/InfromationPopup';
 import { useDispatch, useSelector } from 'react-redux';
-import {  yearGetAPI } from '../../../Actions/YearSlice';
+import { yearGetAPI } from '../../../Actions/YearSlice';
 
 export default function Income() {
     const [startDate, setStartDate] = useState(new Date());
@@ -20,20 +20,20 @@ export default function Income() {
     // const [getAmount, setGetAmount] = useState()
     const [infromation, setInfromation] = useState(false)
     const [infromationMsg, setInfromationMsg] = useState("")
-    const  data  = useSelector((state => state.year))
+    const data = useSelector((state => state.year))
 
-    const income=[]
-    
-    console.log(data,"data")
+    const income = []
+
+    // //(data, "data")
 
     const initialValue = 0;
 
-    data?.year.forEach((el)=>{
-        if(el?.income?.length===1){
+    data?.year.forEach((el) => {
+        if (el?.income?.length === 1) {
             income.push(el)
         }
     })
-   
+
     var toastMessage;
 
     const [values, setValues] = useState({
@@ -51,7 +51,7 @@ export default function Income() {
 
     const renderMonthContent = (month, shortMonth, longMonth) => {
         const tooltipText = `Tooltip for month: ${longMonth}`;
-        console.log(shortMonth, longMonth, month)
+        //(shortMonth, longMonth, month)
         return <span title={tooltipText}>{shortMonth}</span>;
     };
 
@@ -87,13 +87,13 @@ export default function Income() {
         } else {
             errors.amount = true
         }
-        console.log( errors,"errors")
+        //(errors, "errors")
     }
 
     const popUpHandler = () => {
         setPopUpState(!popUpState)
         setAction("Add")
-        values.timestamp= startDate
+        values.timestamp = startDate
     }
 
     const setDate = (date, e) => {
@@ -106,16 +106,16 @@ export default function Income() {
         setDataVaildation(true)
         const myData = new Date(startDate)
         const echoConvert = myData.getTime() / 1000.0;
-        console.log(echoConvert, values, errors)
+        //(echoConvert, values, errors)
         values.timestamp = echoConvert
         var obj = {
-            timestamp:values.timestamp,
-            amount:values.amount,
-            income:[{
-                amount:values.amount
+            timestamp: values.timestamp,
+            amount: values.amount,
+            income: [{
+                amount: values.amount
             }]
         }
-        console.log(obj,values,errors)
+        //(obj, values, errors)
         if (errors.timestamp === true && errors.amount === true) {
             axios.post("http://localhost:4000/api/AddIncome", obj)
                 .then((res) => {
@@ -131,20 +131,20 @@ export default function Income() {
                     })
                     toastMessage = "Added Successfully"
                     dispatch(yearGetAPI())
-                   
-                    setTimeout(()=>{
+
+                    setTimeout(() => {
                         showToastMessage()
-                    },200)
-                   
+                    }, 200)
+
                 })
                 .catch((err) => {
-                    console.log(err)
+                    //(err)
                 })
         }
 
     }
 
-   
+
 
 
     const updateHandler = (e) => {
@@ -155,35 +155,35 @@ export default function Income() {
         Number(values.amount)
 
         var obj = {
-            timestamp:values.timestamp,
-            amount:values.amount,
-            income:[{
-                amount:values.amount
+            timestamp: values.timestamp,
+            amount: values.amount,
+            income: [{
+                amount: values.amount
             }]
         }
-       
-            axios.put(`http://localhost:4000/api/updateIncome/${values?._id}`, obj)
-                .then((res) => {
-                    setValues({
-                        timestamp: null,
-                        amount: null,
-                    })
-                    setDataVaildation(false)
-                    setPopUpState(false)
-                    setErrors({
-                        timestamp: null,
-                        amount: null,
-                    })
-                    toastMessage = "Updated Successfully"
-                    dispatch(yearGetAPI())
-                    setTimeout(()=>{
-                        showToastMessage()
-                    },200)
+
+        axios.put(`http://localhost:4000/api/updateIncome/${values?._id}`, obj)
+            .then((res) => {
+                setValues({
+                    timestamp: null,
+                    amount: null,
                 })
-                .catch((err) => {
-                    console.log(err)
+                setDataVaildation(false)
+                setPopUpState(false)
+                setErrors({
+                    timestamp: null,
+                    amount: null,
                 })
-        
+                toastMessage = "Updated Successfully"
+                dispatch(yearGetAPI())
+                setTimeout(() => {
+                    showToastMessage()
+                }, 200)
+            })
+            .catch((err) => {
+                //(err)
+            })
+
 
 
     }
@@ -191,10 +191,10 @@ export default function Income() {
         setPopUpState(true)
         setAction("Updates")
         setValues(v)
-        console.log(v)
+        //(v)
         var time = new Date(v.timestamp * 1000)
         setStartDate(time)
-        console.log(time)
+        //(time)
 
     }
     const handleDelete = (v, i) => {
@@ -208,7 +208,7 @@ export default function Income() {
     }
 
     const handleDeleteApiCall = () => {
-        
+
         axios.delete(`http://localhost:4000/api/deleteIncome/${values?._id}`)
             .then((res) => {
                 dispatch(yearGetAPI())
@@ -222,7 +222,7 @@ export default function Income() {
                 })
             })
             .then((err) => {
-                console.log(err)
+                //(err)
             })
 
     }
@@ -255,12 +255,12 @@ export default function Income() {
                                 showMonthYearPicker
                                 dateFormat="MM/yyyy"
                             />
-                            {dataVaildation? <span className=' text-[12px] text-[red]'>{errors?.timestamp}</span> :null}
+                            {dataVaildation ? <span className=' text-[12px] text-[red]'>{errors?.timestamp}</span> : null}
                         </div>
                         <div className=' pb-10'>
                             <Input value={values.amount} label="Amount" handleChange={(e) => handleChange(e)} type="number" name="amount" />
-                            {dataVaildation? <span className='text-[12px] text-[red]'>{errors?.amount}</span> :null}
-                        
+                            {dataVaildation ? <span className='text-[12px] text-[red]'>{errors?.amount}</span> : null}
+
                         </div>
                         <div className=' flex justify-end px-4'>
                             <Button buttonName="Cancel" handleClick={popUpHandler} className="mx-2 mt-4 mb-4" />
@@ -284,7 +284,7 @@ export default function Income() {
                         </thead>
                         <tbody>
                             {income?.map((v, i) => {
-                                console.log(v?.duration[0]?.year)
+                                //(v?.duration[0]?.year)
                                 return (
                                     <tr key={i}>
                                         <td className='px-4 text-text-color text-sm py-2'>{i}</td>
@@ -297,6 +297,15 @@ export default function Income() {
                                     </tr>
                                 )
                             })}
+
+                            <tr className=' bg-[#ffd4cc]'>
+                                <td></td>
+                                <td></td>
+                                <td className=' px-4 text-[#dd0821] text-sm py-2'>Total Amount</td>
+                                <td className='px-4  text-[#dd0821] text-sm py-2'>{data?.year[0]?.income[0]?.total_amount}</td>
+                                <td className='px-4 py-2'></td>
+                                <td className='px-4 py-2'></td>
+                            </tr>
 
                         </tbody>
                     </table>

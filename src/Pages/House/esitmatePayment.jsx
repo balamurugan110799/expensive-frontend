@@ -76,16 +76,16 @@ export default function EsitmatePayment() {
     const getEstimate = () => {
         axios.get("http://localhost:4000/api/getEsitmatePayment")
             .then((res) => {
-                console.log(res)
+                //(res)
                 res.data.data.forEach(element => {
                     let date = new Date(element.year * 1000).toLocaleDateString()
                     element.showdate = date
                 });
-                console.log(res.data.data)
+                //(res.data.data)
                 setEstimateData(res.data)
             })
             .catch((err) => {
-                console.log(err)
+                //(err)
             })
     }
     useEffect(() => {
@@ -140,7 +140,7 @@ export default function EsitmatePayment() {
         if (errors.details === true && errors.amount === true) {
             axios.post("http://localhost:4000/api/addEstimatePayment", jsonObj)
                 .then((res) => {
-                    console.log(res)
+                    //(res)
                     setValues({
                         date: null,
                         details: "",
@@ -159,7 +159,7 @@ export default function EsitmatePayment() {
                     })
                 })
                 .catch((err) => {
-                    console.log(err)
+                    //(err)
                 })
         }
     }
@@ -179,14 +179,14 @@ export default function EsitmatePayment() {
         var selectedId;
         getEstimateData?.data?.forEach((el) => {
             if (el.estimatePayment[0]?._id === values?._id) {
-                console.log(el)
+                //(el)
                 selectedId = el?._id;
             }
         })
         alert("Hello")
             axios.put(`http://localhost:4000/api/updateEstimatePayment/${selectedId}`, jsonObj)
                 .then((res) => {
-                    console.log(res)
+                    //(res)
                     setValues({
                         date: null,
                         details: "",
@@ -205,7 +205,7 @@ export default function EsitmatePayment() {
                     })
                 })
                 .catch((err) => {
-                    console.log(err)
+                    //(err)
                 })
         // }
     }
@@ -220,7 +220,7 @@ export default function EsitmatePayment() {
     const handleDeleteApiCall = () => {
         axios.delete(`http://localhost:4000/api/deleteEstimatePayment/${values?._id}`)
             .then((res) => {
-                console.log(res)
+                //(res)
                 setValues({
                     date: null,
                     details: "",
@@ -240,7 +240,7 @@ export default function EsitmatePayment() {
                 })
             })
             .catch((err) => {
-                console.log(err)
+                //(err)
             })
     }
     let str = getEstimateData?.need_to_give;
@@ -249,7 +249,7 @@ export default function EsitmatePayment() {
 let amount = newStr?.substring(1);
     // let subString
 
-    console.log(amount)
+    //(amount)
 
     return (
         <div>
@@ -319,7 +319,7 @@ let amount = newStr?.substring(1);
                     </thead>
                     <tbody>
                         {getEstimateData?.data?.map((v, i) => {
-                            // //console.log(i%2)
+                            // ////(i%2)
                             return (
                                 <tr className={`${i % 2 === 1 ? "td" : null} `}>
                                     <td className=' px-4 text-text-color text-sm py-2'>{i}</td>

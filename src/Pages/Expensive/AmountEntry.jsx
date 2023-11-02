@@ -21,7 +21,7 @@ export default function AmountEntry() {
     const [infromation, setInfromation] = useState(false)
     const [infromationMsg, setInfromationMsg] = useState("")
     const  data  = useSelector((state => state.year))
-    console.log(data)
+    //(data)
     var toastMessage;
 
     const [values, setValues] = useState({
@@ -39,7 +39,7 @@ export default function AmountEntry() {
 
     const renderMonthContent = (month, shortMonth, longMonth) => {
         const tooltipText = `Tooltip for month: ${longMonth}`;
-        console.log(shortMonth, longMonth, month)
+        //(shortMonth, longMonth, month)
         return <span title={tooltipText}>{shortMonth}</span>;
     };
 
@@ -92,7 +92,7 @@ export default function AmountEntry() {
         setDataVaildation(true)
         const myData = new Date(startDate)
         const echoConvert = myData.getTime() / 1000.0;
-        console.log(echoConvert, values, errors)
+        //(echoConvert, values, errors)
         values.year = echoConvert
         if (errors.year === true && errors.amount === true) {
             axios.post("http://localhost:4000/api/AddAmount", values)
@@ -116,7 +116,7 @@ export default function AmountEntry() {
                    
                 })
                 .catch((err) => {
-                    console.log(err)
+                    //(err)
                 })
         }
 
@@ -133,10 +133,10 @@ export default function AmountEntry() {
         delete values.month;
         delete values.yearCal;
         Number(values.amount)
-        console.log(values)
+        //(values)
             axios.put(`http://localhost:4000/api/updateAmountEntry/${values?._id}`, values)
                 .then((res) => {
-                    console.log(res)
+                    //(res)
                     setValues({
                         year: null,
                         amount: null,
@@ -152,7 +152,7 @@ export default function AmountEntry() {
                     dispatch(yearGetAPI())
                 })
                 .catch((err) => {
-                    console.log(err)
+                    //(err)
                 })
         
 
@@ -162,10 +162,10 @@ export default function AmountEntry() {
         setPopUpState(true)
         setAction("Updates")
         setValues(v)
-        console.log(v)
+        //(v)
         var time = new Date(v.year * 1000)
         setStartDate(time)
-        console.log(time)
+        //(time)
 
     }
     const handleDelete = (v, i) => {
@@ -174,7 +174,7 @@ export default function AmountEntry() {
         setValues(v)
 
     }
-    console.log(values)
+    //(values)
     const handleInfromation = () => {
         setInfromation(!infromation)
     }
@@ -193,7 +193,7 @@ export default function AmountEntry() {
                 })
             })
             .then((err) => {
-                console.log(err)
+                //(err)
             })
 
     }

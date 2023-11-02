@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Sidebar() {
 
-    // console.log(sessionStorage.getItem("role"))
+    // //(sessionStorage.getItem("role"))
     // const auth = sessionStorage.getItem("auth")
     const role = sessionStorage.getItem("role")
 

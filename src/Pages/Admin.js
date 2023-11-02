@@ -20,14 +20,14 @@ function Admin() {
 
     const handleClick =(e) =>{
         e.preventDefault()
-        //console.log(values)
+        ////(values)
         axios.post("http://localhost:4000/api/expensive",values)
         .then((res)=>{
-            //console.log(res)
+            ////(res)
             getAll()
         })
         .catch((err) => {
-            //console.log(err)
+            ////(err)
         })
     }
  
@@ -38,7 +38,7 @@ function Admin() {
             setData(res.data)
         })
         .catch((err) => {
-            //console.log(err)
+            ////(err)
         })
     }
  
